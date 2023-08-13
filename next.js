@@ -1,39 +1,39 @@
 // src/const.ts
-var ADDRESS = "YOUR_ADDRESS";
-var TOKEN = "YOUR_TOKEN";
+var 地址= "您的地址" ;
+var  TOKEN = "你的_TOKEN" ;
 
 // src/verify.ts
-var verify = async (data, _sign) => {
-  const signSlice = _sign.split(":");
-  if (!signSlice[signSlice.length - 1]) {
-    return "expire missing";
+var  verify = async  (数据, _sign ) => {
+  const  signSlice = _sign. 分割（“：” ）；
+  if  ( ! signSlice [ signSlice.length - 1 ] ) { 
+    返回 “过期缺失”；
   }
-  const expire = parseInt(signSlice[signSlice.length - 1]);
-  if (isNaN(expire)) {
-    return "expire invalid";
+  const  expire = parseInt ( signSlice [ signSlice.length - 1 ] ) ; _
+  if  ( isNaN (过期) )  {
+    return  "过期无效" ;
   }
-  if (expire < Date.now() / 1e3 && expire > 0) {
-    return "expire expired";
+  if  (过期 < 日期。现在( ) / 1e3 && 过期 > 0 )  {
+    返回 “过期已过期”；
   }
-  const right = await hmacSha256Sign(data, expire);
-  if (_sign !== right) {
-    return "sign mismatch";
+  const  right =等待 hmacSha256Sign (数据, 过期) ;
+  if  ( _sign !== 对)  {
+    返回 “符号不匹配”；
   }
-  return "";
-};
-var hmacSha256Sign = async (data, expire) => {
-  const key = await crypto.subtle.importKey(
-    "raw",
-    new TextEncoder().encode(TOKEN),
-    { name: "HMAC", hash: "SHA-256" },
-    false,
-    ["sign", "verify"]
-  );
-  const buf = await crypto.subtle.sign(
+  返回 “”；
+} ;
+var  hmacSha256Sign =异步 （数据，过期） => {
+  const  key =等待加密。微妙的。导入密钥(
+    “生的”，
+    新的文本编码器（）。编码（令牌），
+    { 名称：“HMAC”，哈希：“SHA-256”  }，
+    假,
+    [ “签名”，“验证” ]
+  ）；
+  const  buf =等待加密。微妙的。标志（
     {
-      name: "HMAC",
-      hash: "SHA-256"
-    },
+      名称：“HMAC”，
+      哈希：“SHA-256”
+    } ,
     key,
     new TextEncoder().encode(`${data}:${expire}`)
   );
